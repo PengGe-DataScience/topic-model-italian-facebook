@@ -1,0 +1,13 @@
+duckdb
+pyarrow
+pandas
+numpy
+scikit-learn
+tqdm
+pyyaml
+python-dotenv
+
+sentence-transformers
+bertopic
+umap-learn
+hdbscan

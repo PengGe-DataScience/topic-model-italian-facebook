@@ -1,0 +1,22 @@
+paths:
+  raw_parquet: "${RAW_PARQUET_PATH}"
+  duckdb_path: "outputs/posts.duckdb"
+  interim_partitioned_dir: "data/interim/raw_partitioned"
+  sample_path: "data/interim/sample.parquet"
+  processed_dir: "data/processed/posts_clean"
+  model_dir: "models/bertopic_model"
+  outputs_dir: "outputs"
+  reports_dir: "reports"
+
+data_schema:
+  text_col: "message"
+  timestamp_col: "date"
+  account_col: "account_platformId"
+  post_id_col: "platformId"
+
+sampling:
+  per_month: 3000
+  seed: 42
+
+streaming:
+  parquet_batch_size: 50000

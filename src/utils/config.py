@@ -15,9 +15,7 @@ def load_config(config_path: str | Path = "configs/default.yaml") -> Dict[str, A
     config_path = Path(config_path)
     raw_text = config_path.read_text(encoding="utf-8")
 
-    # Expand ${VARS} using environment
     raw_text = os.path.expandvars(raw_text)
-
     cfg = yaml.safe_load(raw_text)
 
     return cfg

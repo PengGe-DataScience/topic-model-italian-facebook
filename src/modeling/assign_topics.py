@@ -4,6 +4,7 @@ from typing import Any
 
 import numpy as np
 import pandas as pd
+import pyarrow as pa
 import pyarrow.dataset as ds
 from bertopic import BERTopic
 
@@ -38,7 +39,19 @@ def assign_topics_streaming(cfg: dict[str, Any]) -> None:
     emb_cfg = cfg["embedding"]
     device = get_device(emb_cfg["device"])
 
-    dataset = ds.dataset(processed_dir, format="parquet", partitioning="hive")
+    partition_schema = pa.schema(
+        [
+            ("year", pa.string()),
+            ("month", pa.string()),
+        ]
+    )
+
+    dataset = ds.dataset(
+        processed_dir,
+        format="parquet",
+        partitioning=ds.partitioning(partition_schema, flavor="hive"),
+    )
+
     fragments = list(dataset.get_fragments())
     logger.info("Assigning topics for %d parquet fragments", len(fragments))
 

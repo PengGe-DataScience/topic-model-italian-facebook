@@ -4,6 +4,7 @@ from src.utils.logging import setup_logging
 from src.utils.run_card import write_run_card
 
 
+# Entrypoint of cleaning and partitioning the raw data.
 def main() -> None:
     cfg = load_config("configs/default.yaml")
     ensure_dirs(cfg)

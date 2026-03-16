@@ -1,6 +1,0 @@
-pip-tools
-pytest
-ruff
-pre-commit
-jupyter
-ipykernel

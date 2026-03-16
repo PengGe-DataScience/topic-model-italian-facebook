@@ -1,12 +1,12 @@
 import os
 from pathlib import Path
-from typing import Any, Dict
+from typing import Any
 
 import yaml
 from dotenv import load_dotenv
 
 
-def load_config(config_path: str | Path = "configs/default.yaml") -> Dict[str, Any]:
+def load_config(config_path: str | Path = "configs/default.yaml") -> dict[str, Any]:
     """
     Load YAML config and expand environment variables
     """
@@ -21,14 +21,13 @@ def load_config(config_path: str | Path = "configs/default.yaml") -> Dict[str, A
     return cfg
 
 
-def ensure_dirs(cfg: Dict[str, Any]) -> None:
+def ensure_dirs(cfg: dict[str, Any]) -> None:
     """
     create all output folders.
     """
     for key in [
         "interim_partitioned_dir",
         "processed_dir",
-        "model_dir",
         "outputs_dir",
         "reports_dir",
     ]:

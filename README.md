@@ -125,48 +125,9 @@ This ensures results can be reproduced across machines.
 
 ---
 
-# Installation
-
-Clone the repository:
-
-```bash
-git clone https://github.com/yourusername/topic-model-italian-facebook.git
-cd topic-model-italian-facebook
-```
-
-Create environment:
-
-```bash
-python -m venv .venv
-```
-
-Activate environment:
-
-Windows:
-
-```bash
-.venv\Scripts\activate
-```
-
-Linux / Mac:
-
-```bash
-source .venv/bin/activate
-```
-
-Install dependencies:
-
-```bash
-pip install -r requirements.txt
-```
-
----
-
 # Running the Pipeline
 
 The pipeline is organized into modular scripts.
-
-Example workflow:
 
 ### 1. Profile dataset
 
@@ -206,36 +167,6 @@ python -m scripts.06_evaluate_topics
 
 ---
 
-# Example Output
-
-The pipeline produces:
-
-- discovered topic clusters
-- topic keywords
-- document-topic assignments
-- topic evolution over time
-
-Example topic:
-
-```
-Topic: Urban Infrastructure
-Keywords: mobilità, traffico, trasporti, lavori, strada
-```
-
----
-
-# Why This Project
-
-This repository demonstrates skills relevant to **data scientist and machine learning engineering roles**, including:
-
-- large-scale text processing
-- production-style NLP pipelines
-- reproducible research workflows
-- modular project architecture
-- scalable topic modeling
-
----
-
 # Data Availability
 
 The original dataset contains Facebook posts collected from public pages of municipalities and politicians.
@@ -250,8 +181,6 @@ Users can reproduce the pipeline using their own datasets with similar schema.
 ---
 
 # Future Improvements
-
-Potential extensions include:
 
 - dynamic topic modeling over time
 - temporal trend analysis

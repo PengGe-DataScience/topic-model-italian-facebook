@@ -39,6 +39,7 @@ def assign_topics_streaming(cfg: dict[str, Any]) -> None:
     emb_cfg = cfg["embedding"]
     device = get_device(emb_cfg["device"])
 
+    # make sure year and month are in consistent format
     partition_schema = pa.schema(
         [
             ("year", pa.string()),

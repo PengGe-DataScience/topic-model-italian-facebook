@@ -120,18 +120,19 @@ def clean_partitioned_dataset(cfg: dict[str, Any]) -> None:
                 min_chars = int(pp["min_chars"])
                 df = df[df["text_clean"].str.len() >= min_chars].copy()
 
+                schema = pa.schema(
+                    [
+                        ("doc_id", pa.string()),
+                        ("account", pa.string()),
+                        ("post_id", pa.string()),
+                        ("created_time", pa.timestamp("ns")),
+                        ("text_clean", pa.string()),
+                    ]
+                )
+
                 out_table = pa.Table.from_pandas(
-                    df[
-                        [
-                            "doc_id",
-                            "account",
-                            "post_id",
-                            "created_time",
-                            "year",
-                            "month",
-                            "text_clean",
-                        ]
-                    ],
+                    df[["doc_id", "account", "post_id", "created_time", "text_clean"]],
+                    schema=schema,
                     preserve_index=False,
                 )
 

@@ -3,7 +3,7 @@ from pathlib import Path
 
 import pandas as pd
 
-from src.modeling.embeddings import embed_texts, get_device
+from src.modeling.embeddings import embed_texts, get_device, load_embedding_model
 from src.modeling.train_bertopic import fit_bertopic
 from src.preprocess.text_cleaning import batch_clean_texts
 from src.utils.config import ensure_dirs, load_config
@@ -35,13 +35,18 @@ def main() -> None:
     # Embeddings (sample only)
     emb_cfg = cfg["embedding"]
     device = get_device(emb_cfg["device"])
-    embeddings = embed_texts(
-        docs_clean,
+
+    embedding_model = load_embedding_model(
         model_name=emb_cfg["model_name"],
         device=device,
+        max_seq_length=int(emb_cfg["max_seq_length"]),
+    )
+
+    embeddings = embed_texts(
+        docs_clean,
+        model=embedding_model,
         batch_size=int(emb_cfg["batch_size"]),
         normalize_embeddings=bool(emb_cfg["normalize_embeddings"]),
-        max_seq_length=int(emb_cfg["max_seq_length"]),
     )
 
     topic_model, topic_info = fit_bertopic(cfg, docs_clean, embeddings)

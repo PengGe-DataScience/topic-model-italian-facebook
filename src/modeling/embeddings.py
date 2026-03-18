@@ -7,13 +7,9 @@ logger = logging.getLogger(__name__)
 
 
 def get_device(device_cfg: str) -> str:
-    """
-    device_cfg: "auto" | "cpu" | "cuda"
-    """
     if device_cfg in {"cpu", "cuda"}:
         return device_cfg
 
-    # auto:
     try:
         import torch
 
@@ -22,20 +18,31 @@ def get_device(device_cfg: str) -> str:
         return "cpu"
 
 
-def embed_texts(
-    texts: list[str],
+def load_embedding_model(
     *,
     model_name: str,
     device: str,
-    batch_size: int,
-    normalize_embeddings: bool,
     max_seq_length: int,
-) -> np.ndarray:
+) -> SentenceTransformer:
+    """
+    Load the sentence-transformer once and reuse it across batches.
+    """
+    logger.info("Loading embedding model %s on %s", model_name, device)
     model = SentenceTransformer(model_name, device=device)
     model.max_seq_length = max_seq_length
+    return model
 
-    logger.info("Embedding %d docs with %s on %s", len(texts), model_name, device)
 
+def embed_texts(
+    texts: list[str],
+    *,
+    model: SentenceTransformer,
+    batch_size: int,
+    normalize_embeddings: bool,
+) -> np.ndarray:
+    """
+    Encode a batch of texts using an already-loaded model.
+    """
     emb = model.encode(
         texts,
         batch_size=batch_size,
@@ -43,6 +50,4 @@ def embed_texts(
         convert_to_numpy=True,
         normalize_embeddings=normalize_embeddings,
     )
-
-    # Ensure float32 to reduce memory
     return emb.astype(np.float32, copy=False)

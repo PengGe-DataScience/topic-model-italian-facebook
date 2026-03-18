@@ -8,7 +8,7 @@ import pyarrow as pa
 import pyarrow.dataset as ds
 from bertopic import BERTopic
 
-from src.modeling.embeddings import embed_texts, get_device
+from src.modeling.embeddings import embed_texts, get_device, load_embedding_model
 
 logger = logging.getLogger(__name__)
 
@@ -39,7 +39,13 @@ def assign_topics_streaming(cfg: dict[str, Any]) -> None:
     emb_cfg = cfg["embedding"]
     device = get_device(emb_cfg["device"])
 
-    # make sure year and month are in consistent format
+    embedding_model = load_embedding_model(
+        model_name=emb_cfg["model_name"],
+        device=device,
+        max_seq_length=int(emb_cfg["max_seq_length"]),
+    )
+
+    # Read hive-style partitions like year=2024/month=02
     partition_schema = pa.schema(
         [
             ("year", pa.string()),
@@ -59,43 +65,31 @@ def assign_topics_streaming(cfg: dict[str, Any]) -> None:
     batch_size = int(cfg["streaming"]["parquet_batch_size"])
 
     for frag in fragments:
+        # Extract partition values from the fragment path
+        frag_path = Path(frag.path)
+        year = next(part.split("=")[1] for part in frag_path.parts if part.startswith("year="))
+        month = next(part.split("=")[1] for part in frag_path.parts if part.startswith("month="))
+
         scanner = ds.Scanner.from_fragment(
             frag,
-            columns=["doc_id", "created_time", "year", "month", "text_clean"],
+            columns=["doc_id", "created_time", "text_clean"],
             batch_size=batch_size,
         )
 
-        # Output partition folder from the first batch
-        first_batch = None
-        batches = []
-        for b in scanner.to_batches():
-            if first_batch is None:
-                first_batch = b
-            batches.append(b)
-
-        if first_batch is None:
-            continue
-
-        year = str(first_batch.column(first_batch.schema.get_field_index("year"))[0].as_py())
-        month = str(first_batch.column(first_batch.schema.get_field_index("month"))[0].as_py())
-
         out_partition = out_dir / f"year={year}" / f"month={month}"
         out_partition.mkdir(parents=True, exist_ok=True)
-        out_file = out_partition / (Path(frag.path).stem + "_topics.parquet")
+        out_file = out_partition / (frag_path.stem + "_topics.parquet")
 
-        # Collect rows in chunks so we don't keep embeddings around
         out_chunks = []
-        for batch in batches:
+        for batch in scanner.to_batches():
             df = batch.to_pandas()
             texts = df["text_clean"].tolist()
 
             embeddings = embed_texts(
                 texts,
-                model_name=emb_cfg["model_name"],
-                device=device,
+                model=embedding_model,
                 batch_size=int(emb_cfg["batch_size"]),
                 normalize_embeddings=bool(emb_cfg["normalize_embeddings"]),
-                max_seq_length=int(emb_cfg["max_seq_length"]),
             )
 
             topics, probs = topic_model.transform(texts, embeddings)
@@ -105,18 +99,20 @@ def assign_topics_streaming(cfg: dict[str, Any]) -> None:
                 {
                     "doc_id": df["doc_id"].astype(str),
                     "created_time": df["created_time"],
-                    "year": df["year"].astype(str),
-                    "month": df["month"].astype(str),
+                    "year": year,
+                    "month": month,
                     "topic_id": topics,
                 }
             )
+
             if conf is not None:
                 out_df["topic_confidence"] = conf
 
             out_chunks.append(out_df)
 
-        final = pd.concat(out_chunks, ignore_index=True)
-        final.to_parquet(out_file, index=False)
-        logger.info("Wrote topic assignments: %s", out_file)
+        if out_chunks:
+            final = pd.concat(out_chunks, ignore_index=True)
+            final.to_parquet(out_file, index=False)
+            logger.info("Wrote topic assignments: %s", out_file)
 
     logger.info("Done assigning topics.")

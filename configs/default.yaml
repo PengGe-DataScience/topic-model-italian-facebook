@@ -30,7 +30,7 @@ preprocess:
 
 sampling:
   # total sample size = per_month * number_of_months_present
-  per_month: 3000
+  per_month: 1500
   seed: 42
 
 embedding:
@@ -51,7 +51,7 @@ bertopic:
     max_features: 50000
 
   umap:
-    n_neighbors: 15
+    n_neighbors: 30
     n_components: 5
     min_dist: 0.0
     metric: "cosine"
@@ -59,7 +59,7 @@ bertopic:
 
   hdbscan:
     min_cluster_size: 100
-    min_samples: 20
+    min_samples: 10
     metric: "euclidean"
     cluster_selection_method: "eom"
     prediction_data: true

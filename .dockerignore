@@ -1,0 +1,33 @@
+# Python
+__pycache__
+*.pyc
+*.pyo
+*.pyd
+
+# Virtual environment
+.venv
+venv
+
+# Jupyter
+.ipynb_checkpoints
+
+# IDE
+.idea
+.vscode
+
+# Git
+.git
+.gitignore
+
+# Data
+data
+outputs
+reports
+models
+
+# Environment files
+.env
+
+# OS
+.DS_Store
+Thumbs.db

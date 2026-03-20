@@ -1,0 +1,9 @@
+services:
+  topicmodel:
+    build: .
+    volumes:
+      - .:/app
+      - ${DATA_DIR:-D:/data}:/data
+    environment:
+      - RAW_PARQUET_PATH=/data/facebook_posts.parquet
+    command: python -m scripts.01_profile_sql

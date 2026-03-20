@@ -19,7 +19,7 @@ data_schema:
   post_id_col: "platformId"
 
 preprocess:
-  min_chars: 20
+  min_chars: 40
   keep_emojis_as_text: true
   normalize_hashtags: true
   replace_urls: true
@@ -34,7 +34,8 @@ sampling:
   seed: 42
 
 embedding:
-  model_name: "sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2"
+#  model_name: "sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2"
+  model_name: "nickprock/sentence-bert-base-italian-uncased"
   device: "auto"           # "auto" | "cpu" | "cuda"
   batch_size: 64
   normalize_embeddings: true
@@ -58,7 +59,7 @@ bertopic:
     random_state: 42
 
   hdbscan:
-    min_cluster_size: 100
+    min_cluster_size: 50
     min_samples: 10
     metric: "euclidean"
     cluster_selection_method: "eom"

@@ -10,8 +10,7 @@ __pycache__/
 .ipynb_checkpoints/
 
 # Data & outputs
-data/interim/
-data/processed/
+data/
 outputs/
 reports/
 models/

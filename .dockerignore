@@ -1,29 +1,28 @@
 # Python
-__pycache__
+__pycache__/
 *.pyc
 *.pyo
 *.pyd
 
-# Virtual environment
-.venv
-venv
+# Virtual environments
+.venv/
+venv/
 
 # Jupyter
-.ipynb_checkpoints
+.ipynb_checkpoints/
 
 # IDE
-.idea
-.vscode
+.idea/
+.vscode/
 
 # Git
-.git
-.gitignore
+.git/
 
-# Data
-data
-outputs
-reports
-models
+# Data and generated artifacts
+data/
+outputs/
+reports/
+models/
 
 # Environment files
 .env

@@ -19,7 +19,7 @@ data_schema:
   post_id_col: "platformId"
 
 preprocess:
-  min_chars: 40
+  min_chars: 20
   keep_emojis_as_text: true
   normalize_hashtags: true
   replace_urls: true
@@ -34,8 +34,8 @@ sampling:
   seed: 42
 
 embedding:
-#  model_name: "sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2"
-  model_name: "nickprock/sentence-bert-base-italian-uncased"
+  model_name: "sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2"
+#  model_name: "nickprock/sentence-bert-base-italian-uncased"
   device: "auto"           # "auto" | "cpu" | "cuda"
   batch_size: 64
   normalize_embeddings: true

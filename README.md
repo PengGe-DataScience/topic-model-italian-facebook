@@ -73,14 +73,12 @@ topic-model-italian-facebook
 │
 ├── configs/                  # Configuration files for experiments
 │
-├── data/
-│   ├── raw/                  # Raw dataset location (not included)
-│   ├── interim/              # Intermediate datasets (not included)
-│   └── processed/            # Cleaned text and modeling inputs (not included)
+├── data/                     # Data folder (not included)
+│   ├── raw/                  # Raw dataset location
+│   ├── interim/              # Intermediate datasets
+│   └── processed/            # Cleaned text and modeling inputs
 │
 ├── models/                   # Saved BERTopic models (not included)
-│
-├── notebooks/                # Exploratory analysis and visualization (not included)
 │
 ├── reports/                  # Figures and result summaries (not included)
 │

@@ -7,7 +7,6 @@ To respect data privacy and platform policies, **raw data is not included in thi
 
 - the **complete reproducible pipeline**
 - **configurations and infrastructure**
-- **aggregated results and visualizations**
 
 This allows the methodology and results to be shared **without leaking sensitive raw data**.
 
@@ -76,14 +75,14 @@ topic-model-italian-facebook
 │
 ├── data/
 │   ├── raw/                  # Raw dataset location (not included)
-│   ├── interim/              # Intermediate datasets
-│   └── processed/            # Cleaned text and modeling inputs
+│   ├── interim/              # Intermediate datasets (not included)
+│   └── processed/            # Cleaned text and modeling inputs (not included)
 │
-├── models/                   # Saved BERTopic models
+├── models/                   # Saved BERTopic models (not included)
 │
-├── notebooks/                # Exploratory analysis and visualization
+├── notebooks/                # Exploratory analysis and visualization (not included)
 │
-├── reports/                  # Figures and result summaries
+├── reports/                  # Figures and result summaries (not included)
 │
 ├── scripts/                  # Pipeline entry-point scripts
 │
@@ -164,28 +163,6 @@ python -m scripts.05_assign_topics
 ```bash
 python -m scripts.06_evaluate_topics
 ```
-
----
-
-# Data Availability
-
-The original dataset contains Facebook posts collected from public pages of municipalities and politicians.
-
-To comply with data usage policies and privacy considerations:
-
-- raw posts are **not distributed**
-- only **aggregated results and derived artifacts** are included
-
-Users can reproduce the pipeline using their own datasets with similar schema.
-
----
-
-# Future Improvements
-
-- dynamic topic modeling over time
-- temporal trend analysis
-- topic sentiment analysis
-- multilingual political communication analysis
 
 ---
 
